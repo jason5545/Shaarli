@@ -14,6 +14,7 @@ This guide assumes that you have:
     - create a new release
 - [Composer](https://getcomposer.org/) needs to be installed
 - The [venv](https://docs.python.org/3/library/venv.html) Python 3 module needs to be installed for HTML documentation generation.
+- Make sure you have GNU `tar` installed (not BSD `tar`). On macOS, you can install it with `brew install gnu-tar`.
 
 ## Release notes and `CHANGELOG.md`
 
@@ -46,7 +47,7 @@ GitHub allows drafting the release notes for the upcoming release, from the [Rel
 ## Update the list of Git contributors
 
 ```bash
-$ make authors
+$ make generate_authors
 $ git commit -s -m "Update AUTHORS"
 ```
 
@@ -138,16 +139,16 @@ make release_archive
 This will create `shaarli-v0.x.y-full.tar`, `shaarli-v0.x.y-full.zip`. These archives need to be manually uploaded on the previously created GitHub [release](https://github.com/shaarli/Shaarli/releases).
 
 
-### Update the `latest` branch
+### Update the `release` branch
 
 ```bash
-# checkout the 'latest' branch
-git checkout latest
+# checkout the 'release' branch
+git checkout release
 # merge changes from your newly published release branch
 git merge v0.x.y
 # fix eventual conflicts with git mergetool...
 # run tests
 make test
 # push the latest branch
-git push upstream latest
+git push upstream release
 ```

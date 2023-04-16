@@ -2,6 +2,8 @@
 
 namespace Shaarli\Formatter;
 
+use Shaarli\Bookmark\Bookmark;
+
 /**
  * Class BookmarkDefaultFormatter
  *
@@ -118,7 +120,7 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
                 $prefix = rtrim($this->contextData['base_path'], '/') . '/';
             }
 
-            return escape($prefix ?? '') . escape(ltrim($bookmark->getUrl(), '/'));
+            return escape($prefix ?? '') . escape(ltrim($bookmark->getUrl() ?? '', '/'));
         }
 
         return escape($bookmark->getUrl());
@@ -143,6 +145,18 @@ class BookmarkDefaultFormatter extends BookmarkFormatter
     protected function formatThumbnail($bookmark)
     {
         return escape($bookmark->getThumbnail());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function formatAdditionalContent(Bookmark $bookmark): array
+    {
+        $additionalContent = parent::formatAdditionalContent($bookmark);
+
+        unset($additionalContent['search_highlight']);
+
+        return $additionalContent;
     }
 
     /**

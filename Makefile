@@ -24,6 +24,13 @@ docker_%:
 ##
 PHPCS := $(BIN)/phpcs
 
+# Use GNU Tar where available
+ifneq (, $(shell which gtar))
+TAR := gtar
+else
+TAR := tar
+endif
+
 code_sniffer:
 	@$(PHPCS)
 
@@ -115,9 +122,9 @@ build_frontend: frontend_dependencies
 ### generate a release tarball and include 3rd-party dependencies and translations
 release_tar: composer_dependencies htmldoc translate build_frontend
 	git archive --prefix=$(ARCHIVE_PREFIX) -o $(ARCHIVE_VERSION).tar HEAD
-	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^vendor|$(ARCHIVE_PREFIX)vendor|" vendor/
-	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^doc/html|$(ARCHIVE_PREFIX)doc/html|" doc/html/
-	tar rvf $(ARCHIVE_VERSION).tar --transform "s|^tpl|$(ARCHIVE_PREFIX)tpl|" tpl/
+	$(TAR) rvf $(ARCHIVE_VERSION).tar --transform "s|^vendor|$(ARCHIVE_PREFIX)vendor|" vendor/
+	$(TAR) rvf $(ARCHIVE_VERSION).tar --transform "s|^doc/html|$(ARCHIVE_PREFIX)doc/html|" doc/html/
+	$(TAR) rvf $(ARCHIVE_VERSION).tar --transform "s|^tpl|$(ARCHIVE_PREFIX)tpl|" tpl/
 	gzip $(ARCHIVE_VERSION).tar
 
 ### generate a release zip and include 3rd-party dependencies and translations
@@ -143,7 +150,7 @@ clean:
 	@rm -rf sandbox
 
 ### generate the AUTHORS file from Git commit information
-authors:
+generate_authors:
 	@cp .github/mailmap .mailmap
 	@git shortlog -sne > AUTHORS
 	@rm .mailmap
@@ -165,7 +172,13 @@ htmldoc:
 
 ### Generate Shaarli's translation compiled file (.mo)
 translate:
-	@find inc/languages/ -name shaarli.po -execdir msgfmt shaarli.po -o shaarli.mo \;
+	@echo "----------------------"
+	@echo "Compile translation files"
+	@echo "----------------------"
+	@for pofile in `find inc/languages/ -name shaarli.po`; do \
+		echo "Compiling $$pofile"; \
+		msgfmt -v "$$pofile" -o "`dirname "$$pofile"`/`basename "$$pofile" .po`.mo"; \
+	done;
 
 ### Run ESLint check against Shaarli's JS files
 eslint:

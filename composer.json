@@ -12,11 +12,11 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.1.29"
+            "php": "7.4.33"
         }
     },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.4",
         "ext-json": "*",
         "ext-zlib": "*",
         "arthurhoaro/web-thumbnailer": "^2.0",
@@ -26,13 +26,13 @@
         "katzgrau/klogger": "^1.2",
         "malkusch/lock": "^2.1",
         "pubsubhubbub/publisher": "dev-master",
-        "shaarli/netscape-bookmark-parser": "^3.0",
+        "shaarli/netscape-bookmark-parser": "^4.0",
         "slim/slim": "^3.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
-        "squizlabs/php_codesniffer": "3.*",
-        "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
+        "squizlabs/php_codesniffer": "^3.0",
+        "phpunit/phpunit": "^9.0"
     },
     "suggest": {
         "ext-curl": "Allows fetching web pages and thumbnails in a more robust way",
@@ -66,6 +66,7 @@
             "Shaarli\\Plugin\\": "application/plugin",
             "Shaarli\\Plugin\\Exception\\": "application/plugin/exception",
             "Shaarli\\Plugin\\Wallabag\\": "plugins/wallabag",
+            "Shaarli\\Plugin\\ReadItLater\\": "plugins/readitlater",
             "Shaarli\\Render\\": "application/render",
             "Shaarli\\Security\\": "application/security",
             "Shaarli\\Updater\\": "application/updater",
